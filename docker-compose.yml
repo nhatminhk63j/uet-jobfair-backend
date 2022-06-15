@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8080:8080"
+    restart: always
+    volumes:
+      - ${PWD}/uet_job_fair.db:/app/uet_job_fair.db

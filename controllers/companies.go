@@ -16,22 +16,47 @@ type CompanyInfo struct {
 	Logo string             `json:"logo"`
 }
 
+type FindCompaniesRes struct {
+	Diamond   []CompanyInfo `json:"diamond"`
+	Gold      []CompanyInfo `json:"gold"`
+	Silver    []CompanyInfo `json:"silver"`
+	Copper    []CompanyInfo `json:"copper"`
+	Companion []CompanyInfo `json:"companion"`
+}
+
+type mapTypeToCompanies map[models.CompanyType][]CompanyInfo
+
 // FindCompanies ...
 // GET /companies
 func FindCompanies(c *gin.Context) {
 	var companies []models.Company
 	models.DB.Find(&companies)
 
-	res := make([]CompanyInfo, 0)
+	mapRes := make(mapTypeToCompanies)
+	mapRes[models.DiamondType] = make([]CompanyInfo, 0)
+	mapRes[models.GoldType] = make([]CompanyInfo, 0)
+	mapRes[models.SilverType] = make([]CompanyInfo, 0)
+	mapRes[models.CopperType] = make([]CompanyInfo, 0)
+	mapRes[models.CompanionType] = make([]CompanyInfo, 0)
 	for _, c := range companies {
-		res = append(res, CompanyInfo{
+		if _, ok := mapRes[c.Type]; !ok {
+			mapRes[c.Type] = make([]CompanyInfo, 0)
+		}
+		mapRes[c.Type] = append(mapRes[c.Type], CompanyInfo{
 			ID:   c.ID,
 			Name: c.Name,
 			Type: c.Type,
 			Logo: c.Logo,
 		})
 	}
-	c.JSON(http.StatusOK, gin.H{"data": res})
+
+	c.JSON(http.StatusOK, gin.H{"data": FindCompaniesRes{
+		Diamond:   mapRes[models.DiamondType],
+		Gold:      mapRes[models.GoldType],
+		Silver:    mapRes[models.SilverType],
+		Copper:    mapRes[models.CopperType],
+		Companion: mapRes[models.CompanionType],
+	}})
 }
 
 type CreateCompanyInput struct {
