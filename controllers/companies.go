@@ -10,10 +10,11 @@ import (
 )
 
 type CompanyInfo struct {
-	ID   int                `json:"id"`
-	Name string             `json:"name"`
-	Type models.CompanyType `json:"type"`
-	Logo string             `json:"logo"`
+	ID      int                `json:"id"`
+	Name    string             `json:"name"`
+	Type    models.CompanyType `json:"type"`
+	Logo    string             `json:"logo"`
+	Website string             `json:"website"`
 }
 
 type FindCompaniesRes struct {
@@ -43,10 +44,11 @@ func FindCompanies(c *gin.Context) {
 			mapRes[c.Type] = make([]CompanyInfo, 0)
 		}
 		mapRes[c.Type] = append(mapRes[c.Type], CompanyInfo{
-			ID:   c.ID,
-			Name: c.Name,
-			Type: c.Type,
-			Logo: c.Logo,
+			ID:      c.ID,
+			Name:    c.Name,
+			Type:    c.Type,
+			Logo:    c.Logo,
+			Website: c.Website,
 		})
 	}
 
