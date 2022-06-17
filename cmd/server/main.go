@@ -22,16 +22,7 @@ func main() {
 	// - Origin header
 	// - Credentials share
 	// - Preflight requests cached for 12 hours
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return origin == "*"
-		},
-	}))
+	r.Use(cors.Default())
 
 	models.ConnectDatabase()
 
